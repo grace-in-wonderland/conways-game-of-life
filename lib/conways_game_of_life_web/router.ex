@@ -18,6 +18,7 @@ defmodule ConwaysGameOfLifeWeb.Router do
     pipe_through :browser
 
     live "/", PageLive, :index
+    live "/life", LifeLive
   end
 
   # Other scopes may use custom stacks.

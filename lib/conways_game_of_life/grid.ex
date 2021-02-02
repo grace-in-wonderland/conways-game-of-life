@@ -1,7 +1,12 @@
-defmodule Life.Grid do
+defmodule Grid do
 
   def new() do
-   [ {1,1}, {2,1}, {1,2}, {9,9} ]
+   [ {5,6}, {6,6}, {7,6},
+            {6,7},
+
+                              {35,30}, {36,30}, {37,30},
+                              {35,31},
+                                       {36, 32}]
   end
 
   def turn(alive_points) do
