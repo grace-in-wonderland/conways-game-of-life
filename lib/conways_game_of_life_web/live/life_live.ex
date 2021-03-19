@@ -4,16 +4,18 @@ defmodule ConwaysGameOfLifeWeb.LifeLive do
   import Phoenix.HTML, only: [raw: 1]
 
   def mount(_params, _session, socket) do
+    if connected?(socket), do: :timer.send_interval(250, :tick)
     { :ok, assign(socket, alivecells: Grid.new ) }
   end
 
   def render(assigns) do
     ~L"""
-      <button phx-click="next_turn">Next</button>
-      <button phx-click="add_blinker">Blinker</button>
-      <button phx-click="add_pulsar">Pulsar</button>
-      <button phx-click="add_glider">Glider</button>
-      <button phx-click="add_spaceship">Space Ship</button>
+      <div class="patterns">
+        <button phx-click="add_blinker">Blinker</button>
+        <button phx-click="add_pulsar">Pulsar</button>
+        <button phx-click="add_glider">Glider</button>
+        <button phx-click="add_spaceship">Space Ship</button>
+      </div>
 
       <svg width="400" height="400" style="margin-left: 25%; background-color: #eeeeee">
         <defs>
@@ -25,12 +27,11 @@ defmodule ConwaysGameOfLifeWeb.LifeLive do
         <%= for c <- @alivecells do %>
           <use href="#cell" x="<%= x(c) %>" y="<%= y(c) %>"/>
         <%= end %>
-
       </svg>
     """
   end
 
-  def handle_event("next_turn", _params, socket ) do
+  def handle_info(:tick, socket) do
     current_cells = socket.assigns.alivecells
     {:noreply, assign(socket, alivecells: (Grid.turn(current_cells)) )}
   end
