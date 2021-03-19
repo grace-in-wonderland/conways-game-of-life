@@ -1,0 +1,9 @@
+.patterns {
+  text-align: center;
+}
+
+.patterns button {
+  background-color: green;
+  border: none;
+  width: 150px;
+}
