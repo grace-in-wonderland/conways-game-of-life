@@ -1,7 +1,5 @@
 defmodule ConwaysGameOfLifeWeb.LifeLive do
-  #use Phoenix.LiveView
   use ConwaysGameOfLifeWeb, :live_view
-  import Phoenix.HTML, only: [raw: 1]
 
   def mount(_params, _session, socket) do
     if connected?(socket), do: :timer.send_interval(250, :tick)
@@ -17,17 +15,10 @@ defmodule ConwaysGameOfLifeWeb.LifeLive do
         <button phx-click="add_spaceship">Space Ship</button>
       </div>
 
-      <svg width="400" height="400" style="margin-left: 25%; background-color: #eeeeee">
-        <defs>
-          <g id="cell">
-            <rect width="10" height="10" x="1" y="1" style="fill:green;" />
-          </g>
-        </defs>
-
-        <%= for c <- @alivecells do %>
-          <use href="#cell" x="<%= x(c) %>" y="<%= y(c) %>"/>
-        <%= end %>
-      </svg>
+      <%= live_component(
+          @socket,
+          ConwaysGameOfLifeWeb.Cells,
+          cells: @alivecells) %>
     """
   end
 
@@ -59,7 +50,4 @@ defmodule ConwaysGameOfLifeWeb.LifeLive do
     spaceship_cells = Grid.lightweight_space_ship({30, 2})
     {:noreply, assign(socket, alivecells: current_cells ++ spaceship_cells)}
   end
-
-  defp x({x,_y}), do: (x-1)*10
-  defp y({_x,y}), do: (y-1)*10
 end
